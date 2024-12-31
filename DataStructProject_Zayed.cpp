@@ -10,11 +10,11 @@ struct Student {
     string id;
     string name;
     vector<string> course;
-    vector<int> coursefee;
+    vector<double> coursefee;
     Student *next;
 };
 
-Student *createNode(string id, string name, vector<string> course, vector<int> coursefee) {
+Student *createNode(string id, string name, vector<string> course, vector<double> coursefee) {
     Student *n = new Student();
     n->id = id;
     n->name = name;
@@ -77,7 +77,7 @@ Student* removeStudent(Student *head, string id) {
     return head;
 }
 
-Student* addStudent(Student *head, string id, string name, vector<string> course, vector<int> coursefee) {
+Student* addStudent(Student *head, string id, string name, vector<string> course, vector<double> coursefee) {
     Student *newNode = createNode(id, name, course, coursefee);
     if (!head) {
         return newNode;
@@ -134,6 +134,92 @@ void searchStudent(Student *head, string id) {
 
 }
 
+void bubbleSortByID(Student *&head){
+    if (!head || !head->next)
+        return;
+
+    bool swapped;
+
+    do {
+        swapped = false;
+        Student *current = head; 
+
+        while(current->next != nullptr){
+            if (current->id > current->next->id){
+                swap(current->id, current->next->id);
+                swap(current->name, current->next->name);
+                swap(current->course, current->next->course);
+                swap(current->coursefee, current->next->coursefee);
+                swapped = true;
+            }
+            current = current->next;
+        }
+    }while (swapped);
+}
+
+void bubbleSortByName(Student*& head) {
+    if (!head || !head->next) return;
+
+    bool swapped;
+    do {
+        swapped = false;
+        Student* current = head;
+
+        while (current->next != nullptr) {
+            if (current->name > current->next->name) { // Compare names
+                // Swap the data of the two nodes
+                swap(current->id, current->next->id);
+                swap(current->name, current->next->name);
+                swap(current->course, current->next->course);
+                swap(current->coursefee, current->next->coursefee);
+                swapped = true;
+            }
+            current = current->next;
+        }
+    } while (swapped);
+}
+
+void bubbleSortByCourseFee(Student*& head) {
+    if (!head || !head->next) return;
+
+    bool swapped;
+    do {
+        swapped = false;
+        Student* current = head;
+
+        while (current->next != nullptr) {
+            if (current->coursefee > current->next->coursefee) { // Compare course fees
+                // Swap the data of the two nodes
+                swap(current->id, current->next->id);
+                swap(current->name, current->next->name);
+                swap(current->course, current->next->course);
+                swap(current->coursefee, current->next->coursefee);
+                swapped = true;
+            }
+            current = current->next;
+        }
+    } while (swapped);
+}
+
+
+void printList(Student* head) {
+    Student* current = head;
+    while (current != nullptr) {
+        cout << "ID: " << current->id << ", Name: " << current->name
+             << ", Courses: ";
+        for (const auto& c : current->course) {
+            cout << c << " ";
+        }
+        cout << ", Fees: ";
+        for (const auto& fee : current->coursefee) {
+            cout << fee << " ";
+        }
+        cout << endl;
+        current = current->next;
+    }
+}
+
+
 void admin(Student *&head) {
     int choiceadmin;
     do {
@@ -163,18 +249,46 @@ void admin(Student *&head) {
                 break;
             }
             case 4:
-                cout << "Exiting Admin Menu." << endl;
+            system("cls");
+            int sortChoice;
+                cout << "Sort Students By : " << endl;
+                cout << "1. ID";
+                cout << "2. Name";
+                cout << "3. Total Fee";
+                cout << "4. Course Count ";
+
+                cout << "Enter your choice : ";
+                cin >> sortChoice;
+
+                switch (sortChoice){
+                    case 1: 
+                        bubbleSortByID(head);
+                        printList(head);
+                        break;
+                    case 2: 
+                        bubbleSortByName(head);
+                        printList(head);
+                        break;
+                    case 3: 
+                        bubbleSortByCourseFee(head);
+                        printList(head);
+                        break;
+                }
+            break;
+            
+            case 5: 
+                cout << "Exiting the program";
                 break;
             default:
                 cout << "Invalid choice!" << endl;
         }
-    } while (choiceadmin != 4);
+    } while (choiceadmin != 5);
 }
 
 void user(Student *&head) {
     int choicestudent;
     string courses[] = {"Computer Science", "Data Science", "Artificial Intelligence"};
-    int courseFee[] = {1940, 2040, 2140};
+    double courseFee[] = {1940, 2040, 2140};
 
     do {
         cout << "\nUser Menu:" << endl;
@@ -192,7 +306,7 @@ void user(Student *&head) {
                 cout << "Generated ID: " << id << endl;
 
                 vector<string> selectedCourses;
-                vector<int> selectedFees;
+                vector<double> selectedFees;
                 char choice;
                 do {
                     cout << "\nAvailable Courses:" << endl;
