@@ -3,9 +3,9 @@ Overview
 
 The Student Enrollment System is a project developed to manage student data effectively using chosen data structures and algorithms. It is designed to perform essential operations such as adding, updating, and removing records, while also providing sorting and searching functionalities to enhance data management. This project demonstrates the efficient use of linked lists and other data structures to meet the requirements of a student management system.
 
-Features
+**Features**
 
-Admin Features:
+**Admin Features:**
 
 Add Students: Add new student records, including student ID, name, and enrolled courses.
 
@@ -19,7 +19,7 @@ Remove Students: Delete student records from the system.
 
 Sort Records: Implement sorting algorithms (e.g., bubble sort or insertion sort) to organize students by name or course.
 
-Student Features:
+**Student Features:**
 
 Register: Allow students to register in the system with their details.
 
@@ -29,17 +29,17 @@ View Enrolled Courses: Provide a summary of the courses a student is enrolled in
 
 Calculate Total Cost: Display the total cost based on the courses selected.
 
-Data Structures Used
+**Data Structures Used**
 
-Linked Lists:
+**Linked Lists:**
 
 Used to store and manage dynamic student records, ensuring efficient insertion and deletion operations.
 
-Vectors:
+**Vectors:**
 
 Used for managing a student's course list.
 
-Algorithms Implemented
+**Algorithms Implemented**
 
 1. Sorting Algorithms:
 
@@ -61,21 +61,21 @@ Dynamic Memory Management: The linked list ensures efficient memory use by dynam
 
 Scalability: The system can handle varying numbers of student records without significant performance degradation.
 
-Key Learnings
+**Key Learnings**
 
-Linked List Implementation:
+  Linked List Implementation:
 
-Practical understanding of how to create, traverse, and manipulate linked lists.
+  Practical understanding of how to create, traverse, and manipulate linked lists.
 
-Efficient handling of dynamic data with minimal overhead.
+  Efficient handling of dynamic data with minimal overhead.
 
-Algorithm Design:
+**Algorithm Design:**
 
-Developed sorting and searching algorithms tailored to the system's needs.
+  Developed sorting and searching algorithms tailored to the system's needs.
 
-Applied these algorithms to enhance data organization and retrieval.
+  Applied these algorithms to enhance data organization and retrieval.
 
-Problem-Solving Skills:
+**Problem-Solving Skills:**
 
 Tackled challenges such as handling edge cases (e.g., searching for non-existent records or removing the last record).
 
@@ -87,7 +87,7 @@ Worked collaboratively to integrate features and debug issues.
 
 Leveraged version control systems (Git) to manage contributions and maintain code quality.
 
-How It Meets Data Requirements
+**How It Meets Data Requirements**
 
 The Student Enrollment System efficiently addresses data management needs by:
 
