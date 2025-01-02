@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
-#include <iomanip>
 using namespace std;
 
 int studentincrement = 1;
@@ -12,11 +11,11 @@ struct Student {
     string name;
     vector<string> course;
     vector<double> coursefee;
-    double totalFee;
+    vector<double> totalFee;
     Student *next;
 };
 
-Student *createNode(string id, string name, vector<string> course, vector<double> coursefee, double totalFee) {
+Student *createNode(string id, string name, vector<string> course, vector<double> coursefee, vector<double> totalFee) {
     Student *n = new Student();
     n->id = id;
     n->name = name;
@@ -29,11 +28,10 @@ Student *createNode(string id, string name, vector<string> course, vector<double
     for (int i = 0; i < coursefee.size(); i++) {
         sum += coursefee[i];
     }
-    n->totalFee = sum;
+    n->totalFee.push_back(sum);
 
     return n;
 }
-
 
 void viewStudent(Student *head) {
     if (!head) {
@@ -45,7 +43,6 @@ void viewStudent(Student *head) {
         for (int i = 0; i < temp->course.size(); i++) {
             cout << "Course " << i + 1 << ": " << temp->course[i] << ", Fee: RM" << temp->coursefee[i] << endl;
         }
-        cout << "\nTotal Fee : RM" << temp->totalFee << endl;
         temp = temp->next;
         cout<<endl;
     }
@@ -89,7 +86,7 @@ Student* removeStudent(Student *head, string id) {
     return head;
 }
 
-Student* addStudent(Student *head, string id, string name, vector<string> course, vector<double> coursefee, double totalFee) {
+Student* addStudent(Student *head, string id, string name, vector<string> course, vector<double> coursefee, vector<double> totalFee) {
     Student *newNode = createNode(id, name, course, coursefee, totalFee);
     if (!head) {
         return newNode;
@@ -115,14 +112,10 @@ Student *updateStudent(Student *&head, string id){
             
             // You can add more fields for updates, such as course, fee, etc.
             cout << "Update Successful!" << endl;
-            break;
         }
         temp = temp->next;
     }
-    if (!temp){
-        cout << "Student with id " << id << " not found" << endl;
-    }
-    return head;
+    cout << "Student with id " << id << " not found" << endl;
 }
 
 void searchStudent(Student *head, string id) {
@@ -140,35 +133,14 @@ void searchStudent(Student *head, string id) {
 
          if (choice == 1){
             updateStudent(head, id);
-            }
-        break;
+         }
+
         return;
         }
         temp = temp->next;
     }
+    cout << "Student with ID " << id << " not found." << endl;
 
-    if (!temp){
-        cout << "Student with ID " << id << " not found." << endl;
-    }
-}
-
-Student* createDummyLinkedList(Student *head){
-    Student *dummyHead = nullptr;
-    Student *temp = head;
-    Student *current = nullptr;
-
-    while (temp!= nullptr){
-        Student * newNode = createNode(temp->id, temp->name, temp->course, temp->coursefee, temp->totalFee);
-        if (dummyHead == nullptr){
-            dummyHead = newNode;
-            current = newNode;
-        }else {
-            current ->next = newNode;
-            current= newNode;
-        }
-        temp = temp->next;
-    }
-    return dummyHead;
 }
 
 void bubbleSort(Student *&head, int sortchoice) {
@@ -183,12 +155,11 @@ void bubbleSort(Student *&head, int sortchoice) {
                 Student *current = head;
 
                 while (current->next != nullptr) {
-                    if (current->totalFee > current->next->totalFee) {
+                    if (current->id > current->next->id) {
                         swap(current->id, current->next->id);
                         swap(current->name, current->next->name);
                         swap(current->course, current->next->course);
                         swap(current->coursefee, current->next->coursefee);
-                        swap(current->totalFee, current->next->totalFee);
                         swapped = true;
                     }
                     current = current->next;
@@ -210,7 +181,6 @@ void bubbleSort(Student *&head, int sortchoice) {
                         swap(current->name, current->next->name);
                         swap(current->course, current->next->course);
                         swap(current->coursefee, current->next->coursefee);
-                        swap(current->totalFee, current->next->totalFee);
                         swapped = true;
                     }
                     current = current->next;
@@ -227,11 +197,13 @@ void printList(Student* head) {
     while (current != nullptr) {
         cout << "ID: " << current->id << ", Name: " << current->name
              << ", Courses: ";
-        for (vector<string>::iterator it = current->course.begin(); it != current->course.end(); ++it) {
-            cout << *it << " ";
+        for (const auto& c : current->course) {
+            cout << c << " ";
         }
-
-        cout << ", Total Fee : " << current->totalFee;
+        cout << ", Fees: ";
+        for (const auto& fee : current->coursefee) {
+            cout << fee << " ";
+        }
         cout << endl;
         current = current->next;
     }
@@ -241,17 +213,8 @@ void printList(Student* head) {
 void admin(Student *&head) {
     int choiceadmin;
     do {
-        system("cls");
-        cout << "\n=========================================" << endl;
-        cout << "| " << setw(23) << right << "ADMIN MENU" << setw(16) << " |" << endl;
-        cout << "=========================================" << endl;
-        cout << "| " << setw(5) << left << "1." << setw(32) << left << "View All Students" << " |" << endl;
-        cout << "| " << setw(5) << left << "2." << setw(32) << left << "Remove Student" << " |" << endl;
-        cout << "| " << setw(5) << left << "3." << setw(32) << left << "Search Student" << " |" << endl;
-        cout << "| " << setw(5) << left << "4." << setw(32) << left << "Sort Students" << " |" << endl;
-        cout << "| " << setw(5) << left << "5." << setw(32) << left << "Exit" << " |" << endl;
-        cout << "=========================================" << endl;
-        cout << "Enter choice: ";
+        cout << "\nAdmin Menu:" << endl;
+        cout << "1. View All Students\n2. Remove Student\n3. Search Student\n4. Sort student\n5. Exit\nEnter choice: ";
         cin >> choiceadmin;
 
         switch (choiceadmin) {
@@ -275,9 +238,9 @@ void admin(Student *&head) {
                 searchStudent(head,id);
                 break;
             }
-            case 4: {
-                system("cls");
-                int sortChoice;
+            case 4:
+            system("cls");
+            int sortChoice;
                 cout << "Sort Students By : " << endl
                 	<< "1. Total Fee" <<endl
                     << "2. Name" <<endl;
@@ -285,21 +248,17 @@ void admin(Student *&head) {
                 cout << "Enter your choice : ";
                 cin >> sortChoice;
 
-                //Create dummy linked list 
-                Student *dummyHead = createDummyLinkedList(head);
-
                 switch (sortChoice){
                     case 1: 
-                        bubbleSort(dummyHead,sortChoice);
-                        printList(dummyHead);
+                        bubbleSort(head,sortChoice);
+                        printList(head);
                         break;
                     case 2: 
-                        bubbleSort(dummyHead,sortChoice);
-                        printList(dummyHead);
+                       bubbleSort(head,sortChoice);
+                        printList(head);
                         break;
                 }
             break;
-            }
             
             case 5: 
                 cout << "Exiting the program";
@@ -316,15 +275,8 @@ void user(Student *&head) {
     double courseFee[] = {1940, 2040, 2140};
 
     do {
-        system("cls");
-        cout << "\n====================================" << endl;
-        cout << "| " << setw(20) << right << "USER MENU" << setw(15) << "| " << endl;
-        cout << "====================================" << endl;
-        cout << "| " << setw(5) << left << "1." << setw(28) << left << "Add New Student" << "| " << endl;
-        cout << "| " << setw(5) << left << "2." << setw(28) << left << "View All Students" << "| " << endl;
-        cout << "| " << setw(5) << left << "3." << setw(28) << left << "Exit" << "| " << endl;
-        cout << "====================================" << endl;
-        cout << "Enter choice: ";
+        cout << "\nUser Menu:" << endl;
+        cout << "1. Add New Student\n2. View All Students\n3. Exit\nEnter choice: ";
         cin >> choicestudent;
 
         switch (choicestudent) {
@@ -360,13 +312,13 @@ void user(Student *&head) {
                     cin >> choice;
                 } while (choice == 'y' || choice == 'Y');
 
-                double totalFee = 0;
+                vector<double> totalFee = {0};
                 for (double fee : selectedFees) {
-                    totalFee += fee;
+                    totalFee[0] += fee;
                 }
                 head = addStudent(head, id, name, selectedCourses, selectedFees, totalFee);
                 cout << "Student added successfully." << endl;
-                cout << "Total Fee = RM" << totalFee << endl;
+                cout << "Total Fee = RM" << totalFee[0] << endl;
                 break;
             }
             case 2:
@@ -395,29 +347,22 @@ int main() {
     Student *head = nullptr;
 
     do {
-    system("color 06");
-        cout << "\n=========================================" << endl;
-        cout << "| " << setw(23) << right << "MAIN MENU" << setw(16) << "  |" << endl;
-        cout << "=========================================" << endl;
-        cout << "| " << setw(5) << left << "1." << setw(32) << left << "Admin" << " |" << endl;
-        cout << "| " << setw(5) << left << "2." << setw(32) << left << "User" << " |" << endl;
-        cout << "| " << setw(5) << left << "-1." << setw(32) << left << "Exit" << " |" << endl;
-        cout << "=========================================" << endl;
-        cout << "Enter choice: ";
-    cin >> choice;
+    	system("color 06");
+        cout << "\nMain Menu:\n1. Admin\n2. User\n-1. Exit\nEnter choice: ";
+        cin >> choice;
 
-    if (choice == 1) {
-        system("cls");
-        admin(head);
-    } else if (choice == 2) {
-        system("cls");
-        user(head);
-    } else if (choice == -1) {
-        cout << "Exiting program." << endl;
-    } else {
-        cout << "Invalid choice. Please try again." << endl;
-    }
-} while (choice != -1);
+        if (choice == 1) {
+        	system("cls");
+            admin(head);
+        } else if (choice == 2) {
+        	system("cls");
+            user(head);
+        } else if (choice == -1) {
+            cout << "Exiting program." << endl;
+        } else {
+            cout << "Invalid choice!" << endl;
+        }
+    } while (choice != -1);
 
     freeMemory(head);
     return 0;
